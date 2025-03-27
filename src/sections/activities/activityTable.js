@@ -105,7 +105,7 @@ export const ActivityTable = (props) => {
                             </TableHead>
                             <TableBody>
                                 {data.map((d, i) => (
-                                    <TableRow>
+                                    <TableRow key={i}>
                                         <TableCell>{i + 1}</TableCell>
                                         {/* <TableCell>{d?.code}</TableCell> */}
                                         <TableCell>{d?.name}</TableCell>
