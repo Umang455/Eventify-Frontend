@@ -1,5 +1,6 @@
 // export const baseUrl = "http://139.59.16.130:3010/";
-export const baseUrl = "http://localhost:3010/";
+// export const baseUrl = "http://localhost:3010/";
+export const baseUrl = "https://eventify-backend-a53t.onrender.com/";
 
 export const getCompanySnippets = baseUrl + "companySnippets";
 export const addCompanySnippet = baseUrl + "companySnippets";
