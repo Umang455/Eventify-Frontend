@@ -1,63 +1,51 @@
+"use client";
+
 import {
     Box,
     Button,
+    Card,
+    CardContent,
     Dialog,
     DialogContent,
     DialogTitle,
     Divider,
     Grid,
-    TextField,
     Typography,
 } from "@mui/material";
-import React from "react";
+import { motion } from "framer-motion";
 import moment from "moment";
 import { toast } from "react-toastify";
-// import { useUserStore } from "src/store/useStore";
 import axios from "axios";
 import { registerEventAPI } from "src/config/api";
 
-export const EventView = ({ open, setOpen, item, getData, userDetails }) => {
-    if (!item) {
-        return null;
-    }
-    // const [userDetails, setUserDetails] = useUserStore(state => [state.userDetailsStore, state.updateUserDetails])
+export const EventView = ({ open, setOpen, item, userDetails }) => {
+    if (!item) return null;
 
     const handleRegister = async () => {
         if (userDetails?.registeredEvents?.includes(item._id)) {
-            toast.info('You are already registered for this event!');
+            toast.info("You are already registered for this event!");
             return;
         }
 
-        if (window.confirm('Are you sure you want to register for this event?')) {
+        if (window.confirm("Are you sure you want to register for this event?")) {
             try {
                 await axios.post(registerEventAPI(item._id), { userId: userDetails._id });
-                toast.success('Thank you for registering!');
-                // getData();
+                toast.success("Thank you for registering!");
                 setOpen(false);
             } catch (error) {
-                toast.error('Failed to register. Please try again.');
+                toast.error("Already Registered");
+                setOpen(false)
             }
         }
     };
 
-    const {
-        eventName,
-        eventType,
-        description,
-        location,
-        people,
-        eventTime,
-        eventDuration,
-        venue,
-        theme,
-        budget,
-        activities,
-        decoration,
-    } = item;
-
     return (
-        <Dialog open={open} onClose={() => setOpen(false)} fullScreen>
+        <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
             <DialogTitle
+                component={motion.div}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -68,56 +56,74 @@ export const EventView = ({ open, setOpen, item, getData, userDetails }) => {
                     padding: "20px 50px",
                 }}
             >
-                <Typography color="textPrimary" sx={{ color: "#fff" }} variant="h6">
-                    Event Details
-                </Typography>
-                <Box>
-                    <Button sx={{ color: "#fff" }} onClick={() => setOpen(false)}>
-                        Close
-                    </Button>
-                </Box>
+                <Typography variant="h6">Event Details</Typography>
+                <Button sx={{ color: "#fff" }} onClick={() => setOpen(false)}>
+                    Close
+                </Button>
             </DialogTitle>
-            <DialogContent>
-                <Box padding={2}>
-                    <Typography sx={{ fontSize: 20 }}>Event Details</Typography>
-                    <Divider />
-                    <Grid container marginTop={2} spacing={3}>
-                        {[{ label: "Event Name", value: eventName },
-                        { label: "Event Type", value: eventType },
-                        { label: "Description", value: description, multiline: true, rows: 4 },
-                        { label: "Location", value: location },
-                        { label: "People", value: people },
-                        { label: "Event Time", value: eventTime ? moment(eventTime).format('LLLL') : "" },
-                        { label: "Event Duration", value: eventDuration },
-                        { label: "Venue", value: venue },
-                        { label: "Theme", value: theme },
-                        { label: "Budget", value: budget },
-                        { label: "Activities", value: activities },
-                        { label: "Decoration", value: decoration },].map((field, index) => (
-                            <Grid item md={6} xs={12} key={index}>
-                                <TextField
-                                    label={field.label}
-                                    variant="filled"
-                                    fullWidth
-                                    value={field.value || ""}
-                                    InputProps={{ readOnly: true }}
-                                    multiline={field.multiline}
-                                    rows={field.rows}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                    <Box mt={4} display="flex" justifyContent="center">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleRegister}
-                            disabled={userDetails?.registeredEvents?.includes(item._id)}
-                        >
-                            {userDetails?.registeredEvents?.includes(item._id) ? "Registered" : "Register"}
-                        </Button>
-                    </Box>
-                </Box>
+
+            <DialogContent
+                component={motion.div}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+            >
+                <Card
+                    component={motion.div}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    elevation={4}
+                    sx={{ borderRadius: 3, overflow: "hidden", mt: 2 }}
+                >
+                    <CardContent>
+                        <Typography variant="h5" fontWeight="bold" textAlign="center" mb={2}>
+                            {item.eventName}
+                        </Typography>
+                        <Divider />
+                        <Grid container spacing={2} mt={2}>
+                            {[
+                                { label: "Event Type", value: item.eventType },
+                                { label: "Event Time", value: moment(item.eventTime).format("LLLL") },
+                                { label: "Venue", value: item.venue },
+                                { label: "Theme", value: item.theme },
+                                { label: "Budget", value: `$${item.budget}` },
+                                { label: "Attendees", value: item.people },
+                                { label: "Duration", value: item.eventDuration },
+                            ].map((detail, index) => (
+                                <Grid item xs={12} sm={6} key={index}>
+                                    <Typography variant="subtitle2" color="textSecondary">
+                                        {detail.label}
+                                    </Typography>
+                                    <Typography variant="body1" fontWeight="500">
+                                        {detail.value || "N/A"}
+                                    </Typography>
+                                </Grid>
+                            ))}
+                        </Grid>
+
+                        <Box mt={3}>
+                            <Typography variant="subtitle2" color="textSecondary">
+                                Description
+                            </Typography>
+                            <Typography variant="body1">{item.description}</Typography>
+                        </Box>
+
+                        <Box mt={4} display="flex" justifyContent="center">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleRegister}
+                                disabled={userDetails?.registeredEvents?.includes(item._id)}
+                                component={motion.button}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                {userDetails?.registeredEvents?.includes(item._id) ? "Registered" : "Register"}
+                            </Button>
+                        </Box>
+                    </CardContent>
+                </Card>
             </DialogContent>
         </Dialog>
     );

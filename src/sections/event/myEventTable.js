@@ -13,7 +13,7 @@ import { useUserStore } from "src/store/useStore";
 import * as XLSX from "xlsx";
 import { motion } from "framer-motion";
 
-export const EventTable = ({ items = [] }) => {
+export const MyEventTable = ({ items = [] }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [openViewModal, setOpenViewModal] = useState(false);
     const [selectedSnippet, setSelectedSnippet] = useState(null);

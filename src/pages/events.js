@@ -65,7 +65,7 @@ const Page = () => {
                         </Stack>
                         <EventTable
                             count={activities.length}
-                            items={activities.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)}
+                            items={activities}
                             page={page}
                             rowsPerPage={rowsPerPage}
                             onPageChange={handlePageChange}

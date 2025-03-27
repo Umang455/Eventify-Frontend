@@ -12,10 +12,11 @@ import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
 import { ProjectAdd } from 'src/components/projects/projectAdd';
 import { ProjectsTable } from 'src/sections/projects/projectsTable';
 import axios from 'axios';
-import { getAllProjectsAPI, getFacultyAPI } from 'src/config/api';
+import { getAllProjectsAPI, getFacultyAPI, getMyEvents } from 'src/config/api';
 import { useUserStore } from 'src/store/useStore';
 import { FacultyTable } from 'src/sections/faculty/facultyTable';
 import { FacultyAdd } from 'src/sections/faculty/facultyAdd';
+import { MyEventTable } from 'src/sections/event/myEventTable';
 
 const now = new Date();
 
@@ -41,37 +42,37 @@ const useCustomerIds = (customers) => {
 // import axios from 'axios';
 
 async function getEventIdeas(prompt) {
-  try {
-    const response = await axios.post('https://api.your-gemini-endpoint.com/v1/generate-event-ideas', {
-      prompt: prompt,
-      maxIdeas: 3
-    }, {
-      headers: {
-        'Authorization': `Bearer YOUR_API_KEY`,
-        'Content-Type': 'application/json'
-      }
-    });
+    try {
+        const response = await axios.post('https://api.your-gemini-endpoint.com/v1/generate-event-ideas', {
+            prompt: prompt,
+            maxIdeas: 3
+        }, {
+            headers: {
+                'Authorization': `Bearer YOUR_API_KEY`,
+                'Content-Type': 'application/json'
+            }
+        });
 
-    const eventIdeas = response.data.ideas.map(idea => ({
-      eventName: idea.eventName,
-      catering: idea.catering,
-      timing: idea.timing,
-      estimatedPeople: idea.estimatedPeople,
-      estimatedCost: idea.estimatedCost,
-      venueOptions: idea.venueOptions,
-      additionalNotes: idea.additionalNotes
-    }));
+        const eventIdeas = response.data.ideas.map(idea => ({
+            eventName: idea.eventName,
+            catering: idea.catering,
+            timing: idea.timing,
+            estimatedPeople: idea.estimatedPeople,
+            estimatedCost: idea.estimatedCost,
+            venueOptions: idea.venueOptions,
+            additionalNotes: idea.additionalNotes
+        }));
 
-    return eventIdeas;
-  } catch (error) {
-    console.error('Error fetching event ideas:', error);
-    return [];
-  }
+        return eventIdeas;
+    } catch (error) {
+        console.error('Error fetching event ideas:', error);
+        return [];
+    }
 }
 
 // Example usage
 getEventIdeas("Corporate annual meetup with team-building activities and dinner").then(ideas => {
-  console.log(ideas);
+    console.log(ideas);
 });
 
 
@@ -96,8 +97,8 @@ const Page = () => {
 
     async function _getData() {
         try {
-            let res = await axios.get(getFacultyAPI)
-            console.log(res.data)
+            let res = await axios.post(getMyEvents, { userId: userDetails._id })
+            console.log(res.data, "My events")
             setFaculties(res.data)
             // setProjects(res.data)
         } catch (e) {
@@ -135,7 +136,7 @@ const Page = () => {
                         >
                             <Stack spacing={1}>
                                 <Typography variant="h4">
-                                    My events
+                                    Registered events
                                 </Typography>
                                 <Stack
                                     alignItems="center"
@@ -145,7 +146,7 @@ const Page = () => {
 
                                 </Stack>
                             </Stack>
-                            <div>
+                            {/* <div>
                                 <Button
                                     startIcon={(
                                         <SvgIcon fontSize="small">
@@ -157,12 +158,15 @@ const Page = () => {
                                 >
                                     Add
                                 </Button>
-                            </div>
+                            </div> */}
                         </Stack>
-                        <FacultyTable
-                            getData={_getData}
-                            items={faculties}
-                        />
+                        {faculties.length !== 0 ? (
+
+                            <MyEventTable
+                                getData={_getData}
+                                items={faculties}
+                            />
+                        ) : <></>}
                     </Stack>
                 </Container>
             </Box>
