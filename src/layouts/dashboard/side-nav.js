@@ -53,7 +53,7 @@ export const SideNav = (props) => {
       icon: (
         <Groups3Icon fontSize='small' />
       ),
-      view: userDetails.admin,
+      view: userDetails?.admin,
     },
     {
       title: 'Faculty',
