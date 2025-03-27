@@ -12,15 +12,15 @@ import {
 import React from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
+// import { useUserStore } from "src/store/useStore";
 import axios from "axios";
 import { registerEventAPI } from "src/config/api";
-import { useUserStore } from "src/store/useStore";
 
-export const EventView = ({ open, setOpen, item, getData }) => {
+export const EventView = ({ open, setOpen, item, getData, userDetails }) => {
     if (!item) {
         return null;
     }
-    const [userDetails, setUserDetails] = useUserStore(state => [state.userDetailsStore, state.updateUserDetails])
+    // const [userDetails, setUserDetails] = useUserStore(state => [state.userDetailsStore, state.updateUserDetails])
 
     const handleRegister = async () => {
         if (userDetails?.registeredEvents?.includes(item._id)) {

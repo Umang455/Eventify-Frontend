@@ -9,11 +9,14 @@ import { inviteEventAPI } from "src/config/api";
 import { toast } from "react-toastify";
 import moment from "moment";
 import { EventView } from "./eventView";
+import { useUserStore } from "src/store/useStore";
 
 export const EventTable = ({ items = [] }) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [openViewModal, setOpenViewModal] = useState(false);
     const [selectedSnippet, setSelectedSnippet] = useState(null);
+    const [userDetails, setUserDetails] = useUserStore(state => [state.userDetailsStore, state.updateUserDetails])
+
 
     let data = items;
     if (searchTerm !== "") {
@@ -108,7 +111,7 @@ export const EventTable = ({ items = [] }) => {
                     </Grid>
                 ))}
             </Grid>
-            <EventView open={openViewModal} setOpen={setOpenViewModal} item={selectedSnippet} />
+            <EventView open={openViewModal} setOpen={setOpenViewModal} item={selectedSnippet} userDetails={userDetails} />
         </>
     );
 };
