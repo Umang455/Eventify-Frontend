@@ -115,7 +115,7 @@ export const ActivityTable = (props) => {
                                             setOpenDetailModal(true)
                                             setSelectedEntry(d)
                                         }} >{d?.modules?.length}</TableCell> */}
-                                        <TableCell><a href={baseUrl + 'public/uploads/' + d?.certificate} target="_blank"> <SummarizeIcon /> </a></TableCell>
+                                        {/* <TableCell><a href={baseUrl + '/public/uploads/' + d?.certificate} target="_blank"> <SummarizeIcon /> </a></TableCell> */}
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -137,7 +137,7 @@ export const ActivityTable = (props) => {
         setOpen={setOpenEditModal}
         item={selectedSnippet}
       /> */}
-            <Modal
+            {/* <Modal
                 sx={{ justifyContent: 'center', alignItems: 'center' }}
                 open={openDetailModal}
                 onClose={() => setOpenDetailModal(false)}
@@ -166,7 +166,7 @@ export const ActivityTable = (props) => {
                         </Table>
                     </Box>
                 </Box>
-            </Modal>
+            </Modal> */}
             <ProjectView open={openViewModal} setOpen={setOpenViewModal} item={selectedSnippet} />
         </>
     );

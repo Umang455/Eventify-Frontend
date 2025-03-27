@@ -121,7 +121,7 @@ export const StudentTable = (props) => {
                             </TableHead>
                             <TableBody>
                                 {data.map((d, i) => (
-                                    <TableRow>
+                                    <TableRow key={i}>
                                         <TableCell>{i + 1}</TableCell>
                                         <TableCell>{d?.name}</TableCell>
                                         <TableCell>{d?.phone}</TableCell>
@@ -149,7 +149,7 @@ export const StudentTable = (props) => {
                     rowsPerPageOptions={[5, 10, 25]}
                 />
             </Card>
-            <Modal
+            {/* <Modal
                 sx={{ justifyContent: 'center', alignItems: 'center' }}
                 open={openDetailModal}
                 onClose={() => setOpenDetailModal(false)}
@@ -178,7 +178,7 @@ export const StudentTable = (props) => {
                         </Table>
                     </Box>
                 </Box>
-            </Modal>
+            </Modal> */}
             <ProjectView open={openViewModal} setOpen={setOpenViewModal} item={selectedSnippet} />
         </>
     );

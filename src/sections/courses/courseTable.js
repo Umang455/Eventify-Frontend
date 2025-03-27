@@ -147,36 +147,7 @@ export const CourseTable = (props) => {
         setOpen={setOpenEditModal}
         item={selectedSnippet}
       /> */}
-            <Modal
-                sx={{ justifyContent: 'center', alignItems: 'center' }}
-                open={openDetailModal}
-                onClose={() => setOpenDetailModal(false)}
-            >
-                <Box sx={{ display: 'flex', justifyContent: 'center', }}>
 
-                    <Box
-                        sx={{ backgroundColor: 'white', padding: 5, width: "60%", mt: "15%", borderRadius: 2, justifyContent: 'center' }}
-                    >
-                        <Typography variant="h5">{selectedEntry?.name}</Typography>
-                        <Table sx={{ mt: 2 }} >
-                            <TableHead>
-                                <TableCell>
-                                    Module Number
-                                </TableCell>
-                                <TableCell>Module Name</TableCell>
-                                <TableCell>Module Description</TableCell>
-                            </TableHead>
-                            {selectedEntry?.modules?.map((d) => (
-                                <TableRow>
-                                    <TableCell>{d?.moduleNumber}</TableCell>
-                                    <TableCell>{d?.moduleName}</TableCell>
-                                    <TableCell>{d?.description}</TableCell>
-                                </TableRow>
-                            ))}
-                        </Table>
-                    </Box>
-                </Box>
-            </Modal>
             <ProjectView open={openViewModal} setOpen={setOpenViewModal} item={selectedSnippet} />
         </>
     );
