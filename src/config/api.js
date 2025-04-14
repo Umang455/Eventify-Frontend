@@ -2,6 +2,8 @@
 // export const baseUrl = "http://localhost:3010/";
 export const baseUrl = "https://eventify-backend-a53t.onrender.com/";
 
+
+export const getCompanySnippet3 = baseUrl + "companySnippets";
 export const getCompanySnippets = baseUrl + "companySnippets";
 export const addCompanySnippet = baseUrl + "companySnippets";
 export const deleteCompanySnippet = (id) => baseUrl + `companySnippets/${id}`;
