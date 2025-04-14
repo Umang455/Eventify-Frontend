@@ -111,7 +111,7 @@ const Page = () => {
                     {events.length === 0 ? (
                         <Card sx={{ p: 3, textAlign: 'center' }}>
                             <Typography variant="h6" color="textSecondary">
-                                You haven't created any events yet
+                                You have not created any events yet
                             </Typography>
                         </Card>
                     ) : (

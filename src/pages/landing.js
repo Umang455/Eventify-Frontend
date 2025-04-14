@@ -140,11 +140,44 @@ export default function EventifyLandingPage() {
                     textAlign="center"
                     mb={8}
                 >
-                    <Typography variant="h2" fontWeight="bold" gutterBottom>
+                    <Typography
+                        variant="h1"
+                        sx={{
+                            fontSize: { xs: '2.5rem', sm: '3rem', md: '4rem' },
+                            fontWeight: 'bold',
+                            color: '#fff',
+                            textAlign: 'center',
+                            mb: 2,
+                            textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                        }}
+                    >
                         Welcome to Eventify
                     </Typography>
-                    <Typography variant="h5" color="text.secondary" gutterBottom>
-                        Your Smart AI-Powered Event Planner
+                    <Typography
+                        variant="h4"
+                        sx={{
+                            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.8rem' },
+                            fontWeight: 'normal',
+                            color: '#fff',
+                            textAlign: 'center',
+                            mb: 4,
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                        }}
+                    >
+                        Your Ultimate Event Management Platform
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
+                            fontWeight: 'normal',
+                            color: '#fff',
+                            textAlign: 'center',
+                            mb: 4,
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
+                        }}
+                    >
+                        Plan, organize, and manage your events with ease. From corporate meetings to social gatherings, we&apos;ve got you covered.
                     </Typography>
                     <Button
                         variant="contained"
