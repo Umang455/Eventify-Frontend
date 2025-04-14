@@ -285,7 +285,7 @@ export default function EventifyLandingPage() {
                                                 {testimonial.name}
                                             </Typography>
                                         </Box>
-                                        <Typography color="text.secondary">"{testimonial.feedback}"</Typography>
+                                        <Typography color="text.secondary">{testimonial.feedback}</Typography>
                                     </CardContent>
                                 </Card>
                             </Grid>
