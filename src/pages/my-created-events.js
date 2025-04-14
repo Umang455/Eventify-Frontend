@@ -1,45 +1,61 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import {
     Box,
-    Button,
     Container,
-    Stack,
+    Grid,
     Typography,
     Card,
     CardContent,
     CardMedia,
-    Grid,
-    Chip,
+    Button,
     CircularProgress,
+    Chip,
+    Stack
 } from '@mui/material';
-import axios from 'axios';
-import { getEvents } from 'src/config/api';
-import { useUserStore } from 'src/store/useStore';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import axios from 'axios';
+import { baseUrl, myCreatedEventsAPI } from 'src/config/api';
+import { useUserStore } from 'src/store/useStore';
 import { EventView } from 'src/sections/event/eventView';
-import { baseUrl } from 'src/config/api';
+import { ExcelUpload } from 'src/sections/event/excelUpload';
 import moment from 'moment';
 import { motion } from 'framer-motion';
+import { EventAdd } from 'src/sections/event/eventAdd';
+import { MyCreatedEventView } from 'src/sections/event/myCreatedEventView';
 
 const Page = () => {
-    const [userDetails] = useUserStore(state => [state.userDetailsStore, state.updateUserDetails]);
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [viewOpen, setViewOpen] = useState(false);
+    const [addOpen, setAddOpen] = useState(false);
+    const [excelOpen, setExcelOpen] = useState(false);
+    const userDetails = useUserStore((state) => state.userDetailsStore);
 
     useEffect(() => {
         fetchEvents();
-    }, []);
+    }, [userDetails]);
 
     const fetchEvents = async () => {
         try {
-            let res = await axios.get(getEvents);
-            const sortedEvents = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-            setEvents(sortedEvents);
-        } catch (e) {
-            console.log(e);
+            if (!userDetails?._id) {
+                console.log('No user ID found');
+                setLoading(false);
+                return;
+            }
+            console.log('Fetching events for user:', userDetails._id);
+            const response = await axios.get(myCreatedEventsAPI(userDetails._id));
+            console.log('API Response:', response.data);
+            if (response.data && Array.isArray(response.data)) {
+                setEvents(response.data);
+            } else {
+                console.error('Invalid response format:', response.data);
+                setEvents([]);
+            }
+        } catch (error) {
+            console.error('Error fetching events:', error);
+            setEvents([]);
         } finally {
             setLoading(false);
         }
@@ -61,7 +77,7 @@ const Page = () => {
     return (
         <>
             <Head>
-                <title>Events | Eventify</title>
+                <title>My Created Events | Eventify</title>
             </Head>
             <Box
                 component="main"
@@ -73,13 +89,29 @@ const Page = () => {
                 <Container maxWidth="xl">
                     <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 4 }}>
                         <Typography variant="h4">
-                            Events
+                            My Created Events
                         </Typography>
+                        <Stack direction="row" spacing={2}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => setAddOpen(true)}
+                            >
+                                Add Event
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() => setExcelOpen(true)}
+                            >
+                                Upload Excel
+                            </Button>
+                        </Stack>
                     </Stack>
                     {events.length === 0 ? (
                         <Card sx={{ p: 3, textAlign: 'center' }}>
                             <Typography variant="h6" color="textSecondary">
-                                No events found
+                                You haven't created any events yet
                             </Typography>
                         </Card>
                     ) : (
@@ -122,14 +154,25 @@ const Page = () => {
                                                     Registered Users: {event.registeredUsers?.length || 0}
                                                 </Typography>
                                             </Box>
-                                            <Button
-                                                fullWidth
-                                                variant="contained"
-                                                onClick={() => handleViewEvent(event)}
-                                                sx={{ mt: 2 }}
-                                            >
-                                                View Details
-                                            </Button>
+                                            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+                                                <Button
+                                                    fullWidth
+                                                    variant="contained"
+                                                    onClick={() => handleViewEvent(event)}
+                                                >
+                                                    View Details
+                                                </Button>
+                                                <Button
+                                                    fullWidth
+                                                    variant="outlined"
+                                                    onClick={() => {
+                                                        setSelectedEvent(event);
+                                                        setExcelOpen(true);
+                                                    }}
+                                                >
+                                                    Invite Users
+                                                </Button>
+                                            </Stack>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -139,12 +182,25 @@ const Page = () => {
                 </Container>
             </Box>
             {selectedEvent && (
-                <EventView
+                <MyCreatedEventView
                     open={viewOpen}
                     setOpen={setViewOpen}
                     item={selectedEvent}
                     userDetails={userDetails}
-                    showScheduleOptions={false}
+                    showScheduleOptions={true}
+                />
+            )}
+            <EventAdd
+                open={addOpen}
+                setOpen={setAddOpen}
+                fetchEvents={fetchEvents}
+                userDetails={userDetails}
+            />
+            {selectedEvent && (
+                <ExcelUpload
+                    open={excelOpen}
+                    setOpen={setExcelOpen}
+                    eventId={selectedEvent._id}
                 />
             )}
         </>
@@ -157,4 +213,4 @@ Page.getLayout = (page) => (
     </DashboardLayout>
 );
 
-export default Page;
+export default Page; 

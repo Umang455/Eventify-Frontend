@@ -1,6 +1,4 @@
-export const getInitials = (name = '') => name
-  .replace(/\s+/, ' ')
-  .split(' ')
-  .slice(0, 2)
-  .map((v) => v && v[0].toUpperCase())
-  .join('');
+export const getInitials = (name = '') => {
+  const names = name.trim().split(' ');
+  return names.map((n) => n[0]).join('').toUpperCase().slice(0, 2);
+};

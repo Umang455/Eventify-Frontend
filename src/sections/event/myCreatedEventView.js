@@ -21,19 +21,17 @@ import axios from "axios";
 import { baseUrl, registerEventAPI } from "src/config/api";
 import { useState, useEffect } from "react";
 
-export const EventView = ({ open, setOpen, item, userDetails, showScheduleOptions }) => {
-    const [schedule, setSchedule] = useState(null);
+export const MyCreatedEventView = ({ open, setOpen, item, userDetails }) => {
+    const [schedule, setSchedule] = useState("");
     const [loading, setLoading] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(1);
     const [isEditing, setIsEditing] = useState(false);
-    const isCreator = item?.createdBy?._id === userDetails?._id;
+    const [hasGenerated, setHasGenerated] = useState(false);
 
-    console.log(showScheduleOptions, "show in my");
     useEffect(() => {
         // If there's a saved schedule, load it
-        if (item?.savedSchedule?.scheduleOptions) {
-            setSchedule(item.savedSchedule.scheduleOptions.join('\n\n'));
-            setSelectedOption(item.savedSchedule.selectedOption || 1);
+        if (item?.savedSchedule) {
+            setSchedule(item.savedSchedule);
+            setHasGenerated(true);
         }
     }, [item]);
 
@@ -62,12 +60,12 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
                 userId: userDetails._id
             });
             setSchedule(response.data.schedule);
-            setSelectedOption(1);
             setIsEditing(true);
-            toast.success("Schedule options generated successfully!");
+            setHasGenerated(true);
+            toast.success("Schedule generated successfully!");
         } catch (error) {
             console.error("Error generating schedule:", error);
-            toast.error(error.response?.data?.message || "Failed to generate schedule options");
+            toast.error(error.response?.data?.message || "Failed to generate schedule");
         } finally {
             setLoading(false);
         }
@@ -76,11 +74,9 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
     const saveSchedule = async () => {
         try {
             setLoading(true);
-            const options = schedule.split('Option').filter(option => option.trim());
             await axios.post(baseUrl + `events/save-schedule/${item._id}`, {
                 userId: userDetails._id,
-                selectedOption,
-                scheduleOptions: options.map(opt => opt.replace(/^\d+:/, '').trim())
+                schedule: schedule
             });
             setIsEditing(false);
             toast.success("Schedule saved successfully!");
@@ -94,93 +90,6 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
 
     const editSchedule = () => {
         setIsEditing(true);
-    };
-
-    const renderScheduleOptions = () => {
-        if (!schedule) return null;
-
-        const options = schedule.split('Option').filter(option => option.trim());
-
-        return (
-            <Box mt={2}>
-                <Box mb={2} display="flex" gap={1}>
-                    {options.map((_, index) => (
-                        <Button
-                            key={index + 1}
-                            variant={selectedOption === index + 1 ? "contained" : "outlined"}
-                            color="primary"
-                            size="small"
-                            onClick={() => setSelectedOption(index + 1)}
-                        >
-                            Option {index + 1}
-                        </Button>
-                    ))}
-                </Box>
-                <Card variant="outlined" sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
-                    {isEditing ? (
-                        <TextField
-                            fullWidth
-                            multiline
-                            rows={10}
-                            value={options[selectedOption - 1]?.replace(`${selectedOption}:`, '').trim()}
-                            onChange={(e) => {
-                                const newOptions = [...options];
-                                newOptions[selectedOption - 1] = `Option ${selectedOption}: ${e.target.value}`;
-                                setSchedule(newOptions.join('\n\n'));
-                            }}
-                            variant="outlined"
-                        />
-                    ) : (
-                        <Typography
-                            variant="body1"
-                            sx={{
-                                whiteSpace: 'pre-wrap',
-                                fontFamily: 'monospace',
-                                fontSize: '0.9rem',
-                                lineHeight: 1.5,
-                                color: '#333'
-                            }}
-                        >
-                            {options[selectedOption - 1]?.replace(`${selectedOption}:`, '').trim()}
-                        </Typography>
-                    )}
-                </Card>
-                {showScheduleOptions && (
-                    <Box mt={2} display="flex" justifyContent="flex-end" gap={1}>
-                        {!item.savedSchedule && schedule && !isEditing && (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={saveSchedule}
-                                disabled={loading}
-                            >
-                                Save Schedule
-                            </Button>
-                        )}
-                        {item.savedSchedule && !isEditing && (
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={editSchedule}
-                                disabled={loading}
-                            >
-                                Edit Schedule
-                            </Button>
-                        )}
-                        {isEditing && (
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={saveSchedule}
-                                disabled={loading}
-                            >
-                                Save Changes
-                            </Button>
-                        )}
-                    </Box>
-                )}
-            </Box>
-        );
     };
 
     return (
@@ -240,41 +149,80 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
                         </Box>
 
                         <Box mt={3}>
-                            {showScheduleOptions && !item.savedSchedule && (
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    onClick={generateSchedule}
-                                    disabled={loading}
-                                    sx={{ mb: 2 }}
-                                >
-                                    {loading ? <CircularProgress size={24} /> : "Generate Schedule Options"}
-                                </Button>
-                            )}
-                            {(schedule || item?.savedSchedule) && renderScheduleOptions()}
-                        </Box>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={generateSchedule}
+                                disabled={loading}
+                                sx={{ mb: 2 }}
+                            >
+                                {loading ? <CircularProgress size={24} /> : hasGenerated ? "Regenerate Schedule" : "Generate Schedule"}
+                            </Button>
 
-                        {item?.savedSchedule && (
-                            <Box mt={3}>
+                            <Box mt={2}>
                                 <Typography variant="subtitle2" color="textSecondary" gutterBottom>
                                     Schedule
                                 </Typography>
-                                <Card variant="outlined" sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
-                                    <Typography
-                                        variant="body1"
-                                        sx={{
-                                            whiteSpace: 'pre-wrap',
-                                            fontFamily: 'monospace',
-                                            fontSize: '0.9rem',
-                                            lineHeight: 1.5,
-                                            color: '#333'
-                                        }}
-                                    >
-                                        {item.savedSchedule}
-                                    </Typography>
-                                </Card>
+                                {isEditing ? (
+                                    <TextField
+                                        fullWidth
+                                        multiline
+                                        rows={10}
+                                        value={schedule}
+                                        onChange={(e) => setSchedule(e.target.value)}
+                                        variant="outlined"
+                                    />
+                                ) : (
+                                    <Card variant="outlined" sx={{ p: 2, backgroundColor: '#f8f9fa' }}>
+                                        <Typography
+                                            variant="body1"
+                                            sx={{
+                                                whiteSpace: 'pre-wrap',
+                                                fontFamily: 'monospace',
+                                                fontSize: '0.9rem',
+                                                lineHeight: 1.5,
+                                                color: '#333'
+                                            }}
+                                        >
+                                            {schedule || "No schedule available"}
+                                        </Typography>
+                                    </Card>
+                                )}
                             </Box>
-                        )}
+
+                            <Box mt={2} display="flex" justifyContent="flex-end" gap={1}>
+                                {!item?.savedSchedule && schedule && !isEditing && (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={saveSchedule}
+                                        disabled={loading}
+                                    >
+                                        Save Schedule
+                                    </Button>
+                                )}
+                                {item?.savedSchedule && !isEditing && (
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={editSchedule}
+                                        disabled={loading}
+                                    >
+                                        Edit Schedule
+                                    </Button>
+                                )}
+                                {isEditing && (
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={saveSchedule}
+                                        disabled={loading}
+                                    >
+                                        Save Schedule
+                                    </Button>
+                                )}
+                            </Box>
+                        </Box>
 
                         <Box mt={4} display="flex" justifyContent="center">
                             <Button
@@ -294,4 +242,4 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
             </DialogContent>
         </Dialog>
     );
-};
+}; 

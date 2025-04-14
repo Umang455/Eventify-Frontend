@@ -19,38 +19,70 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { generateEvents, createEvent } from "src/config/api"; // Ensure you have createEvent API
 import { addEvents } from "../../config/api";
 import { toast } from "react-toastify";
 import { useUserStore } from "src/store/useStore";
 
 export const EventAdd = (props) => {
-    const { open, setOpen } = props;
+    const { open, setOpen, fetchEvents, userDetails } = props;
 
     // Form State
     const [eventName, setEventName] = useState("");
     const [eventType, setEventType] = useState("");
     const [description, setDescription] = useState("");
     const [people, setPeople] = useState("");
+    const [budget, setBudget] = useState("");
     const [location, setLocation] = useState("");
     const [catering, setCatering] = useState(false);
     const [eventTime, setEventTime] = useState(null);
     const [eventDuration, setEventDuration] = useState("");
-    const [userDetails, setUserDetails] = useUserStore(state => [state.userDetailsStore, state.updateUserDetails])
+    const [bannerImage, setBannerImage] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState("");
+    const fileInputRef = useRef(null);
 
     // Event Options & Loading
     const [eventOptions, setEventOptions] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null); // To track selected event
 
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setBannerImage(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
     // Generate Event Ideas
     const handleGenerateEvents = async () => {
-        const prompt = `Create an event with the following details: Name: ${eventName}, Type: ${eventType}, Description: ${description}, Location: ${location}, Catering: ${catering ? "Yes" : "No"}, Time: ${eventTime}, Duration: ${eventDuration} hours.`;
+        // Format budget with currency symbol if it's a number
+        const formattedBudget = budget ? `₹${Number(budget).toLocaleString('en-IN')}` : 'Not specified';
+
+        const prompt = `Create an event with the following details: 
+        Name: ${eventName || 'Not specified'}, 
+        Type: ${eventType || 'Not specified'}, 
+        Description: ${description || 'Not specified'}, 
+        Location: ${location || 'Not specified'}, 
+        Catering: ${catering ? "Yes" : "No"}, 
+        Time: ${eventTime ? new Date(eventTime).toLocaleString() : 'Not specified'}, 
+        Duration: ${eventDuration || 'Not specified'} hours,
+        Budget: ${formattedBudget},
+        Number of People: ${people || 'Not specified'}.`;
 
         let data = {
             eventName,
             eventType,
+            budget: formattedBudget,
             description,
             location,
             catering,
@@ -64,6 +96,7 @@ export const EventAdd = (props) => {
             setEventOptions(res.data);
         } catch (error) {
             console.error("Error generating events:", error);
+            toast.error("Error generating event options. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -77,35 +110,61 @@ export const EventAdd = (props) => {
     // Final Submission
     const handleCreateEvent = async () => {
         if (!selectedEvent) {
-            alert("Please select an event option first!");
+            toast.error("Please select an event option first!");
             return;
         }
 
-        // Merging form details with selected event
-        const finalEventData = {
-            eventName,
-            eventType,
-            description,
-            location,
-            cateringReq: catering,
-            eventTime,
-            eventDuration,
-            people,
-            createdBy: userDetails.name,
-            createdById: userDetails._id,
-            ...selectedEvent // Adds theme, activities, venue, decoration
-        };
+        // Validate required fields
+        if (!eventName || !location || !eventTime) {
+            toast.error("Please fill in all required fields: Event Name, Location, and Event Time");
+            return;
+        }
 
-        console.log("finalEventData", finalEventData)
-        // return
         try {
             setLoading(true);
-            let res = await axios.post(addEvents, finalEventData);
+            let formData = new FormData();
+
+            // Format eventTime to ISO string
+            const formattedEventTime = eventTime ? new Date(eventTime).toISOString() : null;
+
+            // Append all event data
+            formData.append('eventName', eventName);
+            formData.append('eventType', eventType);
+            formData.append('description', description);
+            formData.append('location', location);
+            formData.append('catering', catering);
+            formData.append('budget', budget);
+            formData.append('eventTime', formattedEventTime);
+            formData.append('eventDuration', eventDuration);
+            formData.append('people', people);
+            formData.append('createdBy', userDetails._id);
+
+            // Append selected event details
+            Object.keys(selectedEvent).forEach(key => {
+                formData.append(key, selectedEvent[key]);
+            });
+
+            // Append banner image if exists
+            if (bannerImage) {
+                formData.append('bannerImage', bannerImage);
+            }
+
+            let res = await axios.post(addEvents, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
             console.log("Event Created Successfully:", res.data);
-            toast.success("Added Successfully")
-            setOpen(false); // Close dialog
+            toast.success("Event Added Successfully");
+            setOpen(false);
+            if (fetchEvents) {
+                fetchEvents();
+            }
         } catch (error) {
             console.error("Error creating event:", error);
+            const errorMessage = error.response?.data?.message || "Error creating event. Please try again.";
+            toast.error(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -150,10 +209,51 @@ export const EventAdd = (props) => {
                         <Divider />
 
                         <Grid container marginTop={1} spacing={3}>
-                            <Grid item xs={12} md={6}>
+                            {/* Banner Image Upload */}
+                            <Grid item xs={12}>
+                                <Box
+                                    sx={{
+                                        border: '2px dashed #ccc',
+                                        borderRadius: 2,
+                                        p: 2,
+                                        textAlign: 'center',
+                                        cursor: 'pointer',
+                                        '&:hover': {
+                                            borderColor: '#6366F1',
+                                        },
+                                    }}
+                                    onClick={handleImageClick}
+                                >
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                    />
+                                    {previewUrl ? (
+                                        <img
+                                            src={previewUrl}
+                                            alt="Banner Preview"
+                                            style={{
+                                                maxWidth: '100%',
+                                                maxHeight: '200px',
+                                                objectFit: 'contain',
+                                            }}
+                                        />
+                                    ) : (
+                                        <Typography>Click to upload banner image</Typography>
+                                    )}
+                                </Box>
+                            </Grid>
+
+                            <Grid item xs={12} md={4}>
                                 <TextField label="Event Name" fullWidth variant="filled" value={eventName} onChange={(e) => setEventName(e.target.value)} />
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={4}>
+                                <TextField label="Budget" fullWidth variant="filled" value={budget} onChange={(e) => setBudget(e.target.value)} />
+                            </Grid>
+                            <Grid item xs={12} md={4}>
                                 <TextField label="Event Type" fullWidth variant="filled" value={eventType} onChange={(e) => setEventType(e.target.value)} />
                             </Grid>
                             <Grid item xs={12}>

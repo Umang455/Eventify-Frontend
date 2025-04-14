@@ -1,6 +1,6 @@
 // export const baseUrl = "http://139.59.16.130:3010/";
-// export const baseUrl = "http://localhost:3010/";
-export const baseUrl = "https://eventify-backend-a53t.onrender.com/";
+export const baseUrl = "http://localhost:3010/";
+// export const baseUrl = "https://eventify-backend-a53t.onrender.com/";
 
 export const getCompanySnippets = baseUrl + "companySnippets";
 export const addCompanySnippet = baseUrl + "companySnippets";
@@ -59,3 +59,7 @@ export const registerEventAPI = (id) => baseUrl + `events/register/${id}`
 export const inviteEventAPI = (id) => baseUrl + `events/invite/${id}`
 
 export const getMyEvents = baseUrl + 'events/myEvents'
+
+export const myCreatedEventsAPI = (userId) => baseUrl + `events/my-created-events/${userId}`;
+export const myRegisteredEventsAPI = (userId) => baseUrl + `events/my-registered-events/${userId}`;
+export const saveScheduleAPI = (eventId) => baseUrl + `events/save-schedule/${eventId}`;

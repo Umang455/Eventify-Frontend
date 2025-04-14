@@ -56,6 +56,14 @@ export const SideNav = (props) => {
       view: userDetails?.admin,
     },
     {
+      title: 'Profile',
+      path: '/profile',
+      icon: (
+        <Groups3Icon fontSize='small' />
+      ),
+      view: true,
+    },
+    {
       title: 'Faculty',
       path: '/faculty',
       icon: (
@@ -88,13 +96,21 @@ export const SideNav = (props) => {
       view: true,
     },
     {
-      title: 'My Events',
-      path: '/myEvents',
+      title: 'My Created Events',
+      path: '/my-created-events',
       icon: (
         <WorkspacePremiumIcon fontSize='small' />
       ),
       view: true,
     },
+    {
+      title: 'My Registered Events',
+      path: '/my-registered-events',
+      icon: (
+        <WorkspacePremiumIcon fontSize='small' />
+      ),
+      view: true,
+    }
   ];
 
 

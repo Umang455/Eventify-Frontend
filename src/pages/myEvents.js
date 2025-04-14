@@ -17,6 +17,7 @@ import { useUserStore } from 'src/store/useStore';
 import { FacultyTable } from 'src/sections/faculty/facultyTable';
 import { FacultyAdd } from 'src/sections/faculty/facultyAdd';
 import { MyEventTable } from 'src/sections/event/myEventTable';
+import { EventAdd } from 'src/components/event/eventAdd';
 
 const now = new Date();
 
@@ -170,7 +171,12 @@ const Page = () => {
                     </Stack>
                 </Container>
             </Box>
-            <FacultyAdd open={openAddModal} setOpen={setOpenAddModal} getData={_getData} />
+            <EventAdd
+                open={openAddModal}
+                setOpen={setOpenAddModal}
+                fetchEvents={_getData}
+                userDetails={userDetails}
+            />
         </>
     );
 };
