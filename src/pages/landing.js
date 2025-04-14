@@ -10,6 +10,7 @@ import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ThreeBackground from '../components/ThreeBackground';
 
 const features = [
     {
@@ -55,8 +56,52 @@ const faqs = [
 
 export default function EventifyLandingPage() {
     const router = useRouter();
-
-    const theme = createTheme();
+    const theme = createTheme({
+        palette: {
+            mode: 'dark',
+            primary: {
+                main: '#00e5ff',
+                light: '#6effff',
+                dark: '#00b2cc',
+            },
+            secondary: {
+                main: '#b388ff',
+                light: '#e7b9ff',
+                dark: '#805acb',
+            },
+            background: {
+                default: '#0a0a1a',
+                paper: 'rgba(10, 10, 26, 0.8)',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: 'rgba(255, 255, 255, 0.7)',
+            },
+        },
+        typography: {
+            fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+        },
+        components: {
+            MuiCard: {
+                styleOverrides: {
+                    root: {
+                        background: 'rgba(10, 10, 26, 0.6)',
+                        backdropFilter: 'blur(10px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                    },
+                },
+            },
+            MuiButton: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: '8px',
+                        textTransform: 'none',
+                        fontWeight: 600,
+                    },
+                },
+            },
+        },
+    });
 
     const handleGetStarted = () => {
         router.push('/auth/login');
@@ -69,6 +114,7 @@ export default function EventifyLandingPage() {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
+            <ThreeBackground />
 
             {/* Fullscreen Banner */}
             <Box
@@ -87,9 +133,6 @@ export default function EventifyLandingPage() {
                     alignItems: 'center',
                     textAlign: 'center',
                     px: 2,
-                    backgroundImage: 'url(/assets/banner2.jpg)',
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
                     '&::before': {
                         content: '""',
                         position: 'absolute',
@@ -97,34 +140,58 @@ export default function EventifyLandingPage() {
                         left: 0,
                         height: '100%',
                         width: '100%',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        background: 'linear-gradient(to bottom, rgba(10, 10, 26, 0.9), rgba(10, 10, 26, 0.7))',
                         zIndex: 1,
                     },
                     zIndex: 2,
                 }}
             >
                 <Box sx={{ position: 'relative', zIndex: 3 }}>
-                    <Typography variant="h2" fontWeight="bold" gutterBottom>
+                    <Typography
+                        variant="h2"
+                        fontWeight="bold"
+                        gutterBottom
+                        sx={{
+                            background: 'linear-gradient(45deg, #00e5ff, #b388ff)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            textShadow: '0 0 20px rgba(0,229,255,0.3)',
+                            mb: 2,
+                        }}
+                    >
                         Plan Events Effortlessly with Eventify
                     </Typography>
-                    <Typography variant="h6" mb={4}>
+                    <Typography
+                        variant="h6"
+                        mb={4}
+                        sx={{
+                            color: 'rgba(255,255,255,0.9)',
+                            textShadow: '0 0 10px rgba(0,229,255,0.2)',
+                        }}
+                    >
                         Your AI co-pilot for unforgettable events.
                     </Typography>
                     <Button
                         variant="contained"
-                        color="secondary"
+                        color="primary"
                         size="large"
                         component={motion.button}
                         whileHover={{ scale: 1.1 }}
                         onClick={handleGetStarted}
+                        sx={{
+                            background: 'linear-gradient(45deg, #00e5ff, #b388ff)',
+                            boxShadow: '0 0 20px rgba(0,229,255,0.3)',
+                            '&:hover': {
+                                background: 'linear-gradient(45deg, #b388ff, #00e5ff)',
+                            },
+                        }}
                     >
                         Start Planning
                     </Button>
                 </Box>
             </Box>
 
-
-            <Container maxWidth="lg" sx={{ py: 6 }}>
+            <Container maxWidth="lg" sx={{ py: 6, position: 'relative', zIndex: 2 }}>
                 {/* Hero Section */}
                 <Box
                     component={motion.div}

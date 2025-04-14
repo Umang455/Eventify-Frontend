@@ -8,14 +8,14 @@ export const SideNavItem = (props) => {
   const linkProps = path
     ? external
       ? {
-          component: "a",
-          href: path,
-          target: "_blank",
-        }
+        component: "a",
+        href: path,
+        target: "_blank",
+      }
       : {
-          component: NextLink,
-          href: path,
-        }
+        component: NextLink,
+        href: path,
+      }
     : {};
 
   return (
