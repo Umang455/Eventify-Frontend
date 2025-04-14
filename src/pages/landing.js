@@ -1,16 +1,15 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import {
     Typography, Container, Box, Button, Grid, Card, CardContent, Avatar,
-    Accordion, AccordionSummary, AccordionDetails, IconButton, CssBaseline
+    Accordion, AccordionSummary, AccordionDetails, CssBaseline
 } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const features = [
     {
@@ -55,27 +54,21 @@ const faqs = [
 ];
 
 export default function EventifyLandingPage() {
-    const [mode, setMode] = useState('light');
+    const router = useRouter();
 
-    const theme = useMemo(() => createTheme({
-        palette: {
-            mode: mode,
-        },
-    }), [mode]);
+    const theme = createTheme();
 
-    const toggleTheme = () => {
-        setMode(prev => prev === 'light' ? 'dark' : 'light');
+    const handleGetStarted = () => {
+        router.push('/auth/login');
+    };
+
+    const handleSignUp = () => {
+        router.push('/auth/register');
     };
 
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            {/* <Box textAlign="right" p={2}> */}
-
-            <IconButton style={{ position: 'absolute', right: 5, top: 5 }} onClick={toggleTheme} color="inherit">
-                {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
-            {/* </Box> */}
 
             {/* Fullscreen Banner */}
             <Box
@@ -94,7 +87,7 @@ export default function EventifyLandingPage() {
                     alignItems: 'center',
                     textAlign: 'center',
                     px: 2,
-                    backgroundImage: 'url(/assets/banner2.jpg)', // Replace with your image path
+                    backgroundImage: 'url(/assets/banner2.jpg)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     '&::before': {
@@ -104,7 +97,7 @@ export default function EventifyLandingPage() {
                         left: 0,
                         height: '100%',
                         width: '100%',
-                        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black overlay with 50% opacity
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
                         zIndex: 1,
                     },
                     zIndex: 2,
@@ -123,6 +116,7 @@ export default function EventifyLandingPage() {
                         size="large"
                         component={motion.button}
                         whileHover={{ scale: 1.1 }}
+                        onClick={handleGetStarted}
                     >
                         Start Planning
                     </Button>
@@ -145,7 +139,7 @@ export default function EventifyLandingPage() {
                         sx={{
                             fontSize: { xs: '2.5rem', sm: '3rem', md: '4rem' },
                             fontWeight: 'bold',
-                            color: '#fff',
+                            color: '#36454F',
                             textAlign: 'center',
                             mb: 2,
                             textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
@@ -158,8 +152,7 @@ export default function EventifyLandingPage() {
                         sx={{
                             fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.8rem' },
                             fontWeight: 'normal',
-                            color: '#fff',
-                            textAlign: 'center',
+                            color: '#36454F', textAlign: 'center',
                             mb: 4,
                             textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
                         }}
@@ -171,8 +164,7 @@ export default function EventifyLandingPage() {
                         sx={{
                             fontSize: { xs: '1rem', sm: '1.1rem', md: '1.2rem' },
                             fontWeight: 'normal',
-                            color: '#fff',
-                            textAlign: 'center',
+                            color: '#36454F', textAlign: 'center',
                             mb: 4,
                             textShadow: '1px 1px 2px rgba(0,0,0,0.3)'
                         }}
@@ -186,6 +178,7 @@ export default function EventifyLandingPage() {
                         sx={{ mt: 3 }}
                         component={motion.button}
                         whileHover={{ scale: 1.1 }}
+                        onClick={handleGetStarted}
                     >
                         Get Started
                     </Button>
@@ -339,6 +332,7 @@ export default function EventifyLandingPage() {
                         size="large"
                         component={motion.button}
                         whileHover={{ scale: 1.1 }}
+                        onClick={handleSignUp}
                     >
                         Sign Up Now
                     </Button>
