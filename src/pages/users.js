@@ -40,39 +40,7 @@ const useCustomerIds = (customers) => {
 };
 // import axios from 'axios';
 
-async function getEventIdeas(prompt) {
-  try {
-    const response = await axios.post('https://api.your-gemini-endpoint.com/v1/generate-event-ideas', {
-      prompt: prompt,
-      maxIdeas: 3
-    }, {
-      headers: {
-        'Authorization': `Bearer YOUR_API_KEY`,
-        'Content-Type': 'application/json'
-      }
-    });
 
-    const eventIdeas = response.data.ideas.map(idea => ({
-      eventName: idea.eventName,
-      catering: idea.catering,
-      timing: idea.timing,
-      estimatedPeople: idea.estimatedPeople,
-      estimatedCost: idea.estimatedCost,
-      venueOptions: idea.venueOptions,
-      additionalNotes: idea.additionalNotes
-    }));
-
-    return eventIdeas;
-  } catch (error) {
-    console.error('Error fetching event ideas:', error);
-    return [];
-  }
-}
-
-// Example usage
-getEventIdeas("Corporate annual meetup with team-building activities and dinner").then(ideas => {
-  console.log(ideas);
-});
 
 
 const Page = () => {

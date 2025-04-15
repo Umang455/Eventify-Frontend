@@ -102,6 +102,7 @@ export const TopNav = (props) => {
                 </Badge>
               </IconButton>
             </Tooltip> */}
+
             <Avatar
               onClick={accountPopover.handleOpen}
               ref={accountPopover.anchorRef}
@@ -110,7 +111,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src={baseUrl + `${userDetailsStore.profilePicture}`}
+              src={userDetailsStore?.profilePicture ? baseUrl + `${userDetailsStore?.profilePicture}` : "/assets/avatars/avatar-anika-visser.png"}
             />
           </Stack>
         </Stack>
