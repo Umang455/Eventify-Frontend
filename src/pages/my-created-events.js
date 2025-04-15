@@ -99,13 +99,13 @@ const Page = () => {
                             >
                                 Add Event
                             </Button>
-                            <Button
+                            {/* <Button
                                 variant="contained"
                                 color="primary"
                                 onClick={() => setExcelOpen(true)}
                             >
                                 Upload Excel
-                            </Button>
+                            </Button> */}
                         </Stack>
                     </Stack>
                     {events.length === 0 ? (

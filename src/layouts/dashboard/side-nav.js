@@ -29,6 +29,7 @@ import HailIcon from '@mui/icons-material/Hail';
 import Groups3Icon from '@mui/icons-material/Groups3';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import SmartToyIcon from '@mui/icons-material/SmartToy';
 
 
 export const SideNav = (props) => {
@@ -110,7 +111,8 @@ export const SideNav = (props) => {
         <WorkspacePremiumIcon fontSize='small' />
       ),
       view: true,
-    }
+    },
+
   ];
 
 
@@ -265,7 +267,7 @@ export const SideNav = (props) => {
           sx: {
             backgroundColor: 'neutral.800',
             color: 'common.white',
-            width: 280
+            width: 300
           }
         }}
         variant="permanent"
@@ -299,3 +301,4 @@ SideNav.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool
 };
+502803500050280

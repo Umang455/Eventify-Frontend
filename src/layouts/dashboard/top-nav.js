@@ -16,6 +16,8 @@ import {
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
+import { useUserStore } from 'src/store/useStore';
+import { baseUrl } from 'src/config/api';
 
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
@@ -24,7 +26,9 @@ export const TopNav = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
+  const [userDetailsStore, setUserDetailsStore] = useUserStore(state => [state.userDetailsStore, state.updateUserDetails])
 
+  console.log(userDetailsStore, "my user details")
   return (
     <>
       <Box
@@ -65,13 +69,13 @@ export const TopNav = (props) => {
                 </SvgIcon>
               </IconButton>
             )}
-            <Tooltip title="Search">
+            {/* <Tooltip title="Search">
               <IconButton>
                 <SvgIcon fontSize="small">
                   <MagnifyingGlassIcon />
                 </SvgIcon>
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
           </Stack>
           <Stack
             alignItems="center"
@@ -106,7 +110,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src="/assets/avatars/avatar-anika-visser.png"
+              src={baseUrl + `${userDetailsStore.profilePicture}`}
             />
           </Stack>
         </Stack>

@@ -27,7 +27,6 @@ import axios from 'axios';
 import { baseUrl } from 'src/config/api';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { useUserStore } from 'src/store/useStore';
-// import { useSnackbar } from 'notistack';
 import { PhotoCamera } from '@mui/icons-material';
 
 const Page = () => {
@@ -37,7 +36,6 @@ const Page = () => {
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
     const [profilePicture, setProfilePicture] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
-    // const { enqueueSnackbar } = useSnackbar();
 
     const [formData, setFormData] = useState({
         name: '',
@@ -131,7 +129,7 @@ const Page = () => {
             formData.append('profilePicture', file);
             formData.append('id', userDetails._id);
 
-            const response = await axios.patch(baseUrl + 'uploads/profile-picture', formData, {
+            const response = await axios.patch(baseUrl + `users/${userDetails._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -142,11 +140,19 @@ const Page = () => {
                     ...prev,
                     profilePicture: response.data.profilePicture
                 }));
-                // enqueueSnackbar('Profile picture updated successfully', { variant: 'success' });
+                setSnackbar({
+                    open: true,
+                    message: 'Profile picture updated successfully',
+                    severity: 'success'
+                });
             }
         } catch (error) {
             console.error('Error uploading profile picture:', error);
-            // enqueueSnackbar('Failed to update profile picture', { variant: 'error' });
+            setSnackbar({
+                open: true,
+                message: 'Failed to update profile picture',
+                severity: 'error'
+            });
         }
     };
 
@@ -156,43 +162,34 @@ const Page = () => {
 
         setSaving(true);
         try {
-            // First upload the profile picture if it exists
-            if (profilePicture) {
-                const formData = new FormData();
-                formData.append('profilePicture', profilePicture);
-                formData.append('id', userDetails._id);
-                const uploadResponse = await axios.post(
-                    baseUrl + 'uploads/profile-picture',
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    }
-                );
-
-                setFormData(prev => ({
-                    ...prev,
-                    profilePicture: uploadResponse.data.profilePicture
-                }));
+            const data = new FormData();
+            
+            // Append all form fields
+            data.append('name', formData.name);
+            data.append('email', formData.email);
+            data.append('phone', formData.phone);
+            data.append('address', formData.address);
+            data.append('bio', formData.bio);
+            data.append('gender', formData.gender);
+            if (formData.dateOfBirth) {
+                data.append('dateOfBirth', formData.dateOfBirth.toISOString());
+            }
+            if (formData.interests) {
+                data.append('interests', JSON.stringify(formData.interests));
             }
 
-            // Prepare the data to be sent to the server
-            const updateData = {
-                name: formData.name,
-                email: formData.email,
-                phone: formData.phone,
-                dateOfBirth: formData.dateOfBirth,
-                gender: formData.gender,
-                address: formData.address,
-                profilePicture: formData.profilePicture,
-                interests: formData.interests,
-                preferences: formData.preferences,
-                bio: formData.bio
-            };
+            // If there's a new profile picture, append it
+            if (profilePicture) {
+                data.append('profilePicture', profilePicture);
+            }
 
             // Update the user profile
-            const response = await axios.put(baseUrl + `users/${userDetails._id}`, updateData);
+            const response = await axios.patch(baseUrl + `users/profile/${userDetails._id}`, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
 
             // Update the user details in the store
             useUserStore.setState({ userDetails: { ...userDetails, ...response.data } });
@@ -235,8 +232,14 @@ const Page = () => {
                             <Grid item xs={12}>
                                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
                                     <Avatar
-                                        src={formData.profilePicture}
-                                        sx={{ width: 120, height: 120 }}
+                                        src={previewUrl || (formData.profilePicture ? `${baseUrl}${formData.profilePicture}` : null)}
+                                        sx={{
+                                            width: 120,
+                                            height: 120,
+                                            border: '2px solid',
+                                            borderColor: 'primary.main',
+                                            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+                                        }}
                                     />
                                     <Button
                                         variant="contained"
@@ -248,7 +251,7 @@ const Page = () => {
                                             type="file"
                                             hidden
                                             accept="image/*"
-                                            onChange={handleProfilePictureChange}
+                                            onChange={handleImageChange}
                                         />
                                     </Button>
                                     <Typography variant="caption" color="text.secondary">

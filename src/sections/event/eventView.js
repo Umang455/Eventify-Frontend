@@ -23,7 +23,6 @@ import { baseUrl, registerEventAPI } from "src/config/api";
 import { useState, useEffect, useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { InvitationStyleDialog } from './InvitationStyleDialog';
 
 export const EventView = ({ open, setOpen, item, userDetails, showScheduleOptions }) => {
     const [schedule, setSchedule] = useState(null);
@@ -32,7 +31,6 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
     const [isEditing, setIsEditing] = useState(false);
     const isCreator = item?.createdBy?._id === userDetails?._id;
     const pdfRef = useRef();
-    const [showInvitationDialog, setShowInvitationDialog] = useState(false);
 
     console.log(showScheduleOptions, "show in my");
     useEffect(() => {
@@ -189,32 +187,189 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
         );
     };
 
-    const generatePDF = async (style) => {
+    const generatePDF = async () => {
         try {
-            // Generate the HTML content using the template function
-            const html = style.template(item);
+            // Create the HTML content with the same styling as event view
+            const html = `
+                <div style="
+                    font-family: 'Poppins', sans-serif;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background: #ffffff;
+                ">
+                    <div style="
+                        background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+                        padding: 30px;
+                        text-align: center;
+                        color: white;
+                        border-radius: 15px 15px 0 0;
+                    ">
+                        <h1 style="margin: 0; font-size: 32px; font-weight: 600;">You're Invited!</h1>
+                    </div>
+
+                    <div style="
+                        padding: 30px;
+                        background: #ffffff;
+                        border-radius: 0 0 15px 15px;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                    ">
+                        ${item.bannerImage ? `
+                            <img 
+                                src="${baseUrl + item.bannerImage}" 
+                                alt="${item.eventName}" 
+                                style="
+                                    width: 100%;
+                                    height: 300px;
+                                    object-fit: cover;
+                                    border-radius: 10px;
+                                    margin-bottom: 20px;
+                                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                                "
+                            />
+                        ` : ''}
+
+                        <h2 style="
+                            color: #2c3e50;
+                            font-size: 28px;
+                            font-weight: 600;
+                            text-align: center;
+                            margin-bottom: 20px;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                        ">
+                            ${item.eventName}
+                        </h2>
+
+                        <div style="
+                            display: grid;
+                            grid-template-columns: repeat(2, 1fr);
+                            gap: 20px;
+                            margin-bottom: 30px;
+                        ">
+                            <div style="
+                                padding: 15px;
+                                background: #f8f9fa;
+                                border-radius: 10px;
+                                border: 1px solid #e9ecef;
+                            ">
+                                <p style="margin: 0; color: #6c757d; font-size: 14px;">📍 Venue</p>
+                                <p style="margin: 5px 0 0; font-weight: 500; color: #2c3e50;">${item.venue}</p>
+                            </div>
+
+                            <div style="
+                                padding: 15px;
+                                background: #f8f9fa;
+                                border-radius: 10px;
+                                border: 1px solid #e9ecef;
+                            ">
+                                <p style="margin: 0; color: #6c757d; font-size: 14px;">📅 Date & Time</p>
+                                <p style="margin: 5px 0 0; font-weight: 500; color: #2c3e50;">
+                                    ${moment(item.eventTime).format("LLLL")}
+                                </p>
+                            </div>
+
+                            <div style="
+                                padding: 15px;
+                                background: #f8f9fa;
+                                border-radius: 10px;
+                                border: 1px solid #e9ecef;
+                            ">
+                                <p style="margin: 0; color: #6c757d; font-size: 14px;">🎨 Theme</p>
+                                <p style="margin: 5px 0 0; font-weight: 500; color: #2c3e50;">${item.theme}</p>
+                            </div>
+
+                            <div style="
+                                padding: 15px;
+                                background: #f8f9fa;
+                                border-radius: 10px;
+                                border: 1px solid #e9ecef;
+                            ">
+                                <p style="margin: 0; color: #6c757d; font-size: 14px;">👥 Attendees</p>
+                                <p style="margin: 5px 0 0; font-weight: 500; color: #2c3e50;">${item.people}</p>
+                            </div>
+
+                            <div style="
+                                padding: 15px;
+                                background: #f8f9fa;
+                                border-radius: 10px;
+                                border: 1px solid #e9ecef;
+                            ">
+                                <p style="margin: 0; color: #6c757d; font-size: 14px;">💰 Budget</p>
+                                <p style="margin: 5px 0 0; font-weight: 500; color: #2c3e50;">${item.budget}</p>
+                            </div>
+
+                            <div style="
+                                padding: 15px;
+                                background: #f8f9fa;
+                                border-radius: 10px;
+                                border: 1px solid #e9ecef;
+                            ">
+                                <p style="margin: 0; color: #6c757d; font-size: 14px;">🎉 Event Type</p>
+                                <p style="margin: 5px 0 0; font-weight: 500; color: #2c3e50;">${item.eventType}</p>
+                            </div>
+                        </div>
+
+                        ${item.description ? `
+                            <div style="
+                                padding: 20px;
+                                background: #f8f9fa;
+                                border-radius: 10px;
+                                margin-bottom: 30px;
+                            ">
+                                <h3 style="
+                                    color: #2c3e50;
+                                    margin: 0 0 15px;
+                                    font-size: 18px;
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                ">
+                                    📝 Description
+                                </h3>
+                                <p style="
+                                    margin: 0;
+                                    color: #495057;
+                                    line-height: 1.6;
+                                ">
+                                    ${item.description}
+                                </p>
+                            </div>
+                        ` : ''}
+                        <div style="
+                            text-align: center;
+                            margin-top: 30px;
+                            color: #6c757d;
+                            font-size: 14px;
+                        ">
+                            <p>We look forward to seeing you there!</p>
+                            <p>Best regards,<br>The Eventify Team</p>
+                        </div>
+                    </div>
+                </div>
+            `;
 
             // Create and style the temporary div
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = html;
 
-            // ✅ Style to match A4 size and avoid white space
+            // Style to match A4 size
             tempDiv.style.width = '794px'; // A4 width in pixels at 96 DPI
             tempDiv.style.height = '1123px'; // A4 height in pixels at 96 DPI
             tempDiv.style.position = 'absolute';
             tempDiv.style.top = '0';
             tempDiv.style.left = '0';
-            tempDiv.style.backgroundColor = '#ffffff'; // Solid white background
+            tempDiv.style.backgroundColor = '#ffffff';
             tempDiv.style.padding = '0';
             tempDiv.style.margin = '0';
-            tempDiv.style.zIndex = '-1'; // Hidden from user view
+            tempDiv.style.zIndex = '-1';
 
             document.body.appendChild(tempDiv);
 
             // Generate canvas from the div
             const canvas = await html2canvas(tempDiv, {
-                scale: 2,        // Higher resolution
-                useCORS: true,   // In case of external assets
+                scale: 2,
+                useCORS: true,
                 logging: false,
             });
 
@@ -236,14 +391,8 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
         }
     };
 
-
     const handleGenerateInvite = () => {
-        setShowInvitationDialog(true);
-    };
-
-    const handleStyleSelect = (style) => {
-        setShowInvitationDialog(false);
-        generatePDF(style);
+        generatePDF();
     };
 
     return (
@@ -409,13 +558,6 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
                     </Box>
                 </DialogContent>
             </Dialog>
-
-            <InvitationStyleDialog
-                open={showInvitationDialog}
-                onClose={() => setShowInvitationDialog(false)}
-                onSelect={handleStyleSelect}
-                item={item}
-            />
         </>
     );
 };
