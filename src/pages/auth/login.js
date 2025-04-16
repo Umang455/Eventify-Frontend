@@ -31,7 +31,7 @@ const Page = () => {
     state.updateUserDetails,
   ]);
 
-  const [loginAs, setLoginAs] = useState("Eventgead")
+  const [loginAs, setLoginAs] = useState("EventHead")
 
   const router = useRouter();
   const auth = useAuth();
