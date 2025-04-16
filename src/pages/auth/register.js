@@ -60,7 +60,7 @@ const Page = () => {
           password: values.password,
           phone: values.phone,
           address: values.address,
-          role: values.role,
+          role: "User",
           isAdmin: values.role === "Admin",
         });
 
@@ -317,7 +317,7 @@ const Page = () => {
                     },
                   }}
                 />
-                <Autocomplete
+                {/* <Autocomplete
                   options={["User", "EventHead", "Admin"]}
                   value={formik.values.role}
                   onChange={(event, newValue) => {
@@ -353,7 +353,7 @@ const Page = () => {
                       }}
                     />
                   )}
-                />
+                /> */}
               </Stack>
               {formik.errors.submit && (
                 <Typography color="error" sx={{ mt: 3 }} variant="body2">
