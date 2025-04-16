@@ -217,7 +217,7 @@ const Page = () => {
                     },
                   }}
                 />
-                <Autocomplete
+                {/* <Autocomplete
                   options={["Admin", "User", "Eventhead"]}
                   value={loginAs}
                   onChange={(e, newValue) => setLoginAs(newValue)}
@@ -249,7 +249,7 @@ const Page = () => {
                       }}
                     />
                   )}
-                />
+                /> */}
               </Stack>
 
               {formik.errors.submit && (
