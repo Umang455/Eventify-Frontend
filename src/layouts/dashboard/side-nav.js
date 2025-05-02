@@ -30,8 +30,9 @@ import Groups3Icon from '@mui/icons-material/Groups3';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
-
-
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import DateRangeIcon from '@mui/icons-material/DateRange';
 export const SideNav = (props) => {
 
   const [userDetails, setUserDetails] = useUserStore(state => [state.userDetailsStore, state.updateUserDetails])
@@ -49,7 +50,7 @@ export const SideNav = (props) => {
       view: false,
     },
     {
-      title: 'Users',
+      title: 'All Users',
       path: '/users',
       icon: (
         <Groups3Icon fontSize='small' />
@@ -60,39 +61,16 @@ export const SideNav = (props) => {
       title: 'Profile',
       path: '/profile',
       icon: (
-        <Groups3Icon fontSize='small' />
+        <PersonPinIcon fontSize='small' />
       ),
       view: true,
     },
-    {
-      title: 'Faculty',
-      path: '/faculty',
-      icon: (
-        <HailIcon fontSize='small' />
-      ),
-      view: false,
-    },
-    {
-      title: 'Courses',
-      path: '/courses',
-      icon: (
-        <FileCopyIcon fontSize='small' />
-      ),
-      view: false,
-    },
-    {
-      title: 'Activities',
-      path: '/activities',
-      icon: (
-        <WorkspacePremiumIcon fontSize='small' />
-      ),
-      view: false,
-    },
+
     {
       title: 'Events',
       path: '/events',
       icon: (
-        <WorkspacePremiumIcon fontSize='small' />
+        <EventAvailableIcon fontSize='small' />
       ),
       view: true,
     },
@@ -100,7 +78,7 @@ export const SideNav = (props) => {
       title: 'My Created Events',
       path: '/my-created-events',
       icon: (
-        <WorkspacePremiumIcon fontSize='small' />
+        <DateRangeIcon fontSize='small' />
       ),
       view: true,
     },
@@ -164,7 +142,7 @@ export const SideNav = (props) => {
             }}
           >
             {/* <Logo /> */}
-            <Typography variant='h6'   >Eventify</Typography>
+            <Typography variant='h6'   >Eventifyy</Typography>
           </Box>
           <Box
             sx={{

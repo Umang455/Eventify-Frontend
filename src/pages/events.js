@@ -61,7 +61,7 @@ const Page = () => {
     return (
         <>
             <Head>
-                <title>Events | Eventify</title>
+                <title>Events | Eventifyy</title>
             </Head>
             <Box
                 component="main"

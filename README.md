@@ -1,2 +1,2 @@
 
-"# Eventify-Frontend" 
+"# Eventifyy-Frontend" 

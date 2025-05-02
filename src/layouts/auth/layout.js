@@ -214,7 +214,7 @@ export const Layout = (props) => {
               textAlign: 'center'
             }}
           >
-            Eventify
+            Eventifyy
           </Typography>
         </Grid>
       </Grid>

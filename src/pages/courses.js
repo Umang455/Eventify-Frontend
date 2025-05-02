@@ -67,7 +67,7 @@ const Page = () => {
         <>
             <Head>
                 <title>
-                    Courses | Eventify
+                    Courses | Eventifyy
                 </title>
             </Head>
             <Box

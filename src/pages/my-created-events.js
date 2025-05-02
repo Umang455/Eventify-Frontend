@@ -77,7 +77,7 @@ const Page = () => {
     return (
         <>
             <Head>
-                <title>My Created Events | Eventify</title>
+                <title>My Created Events | Eventifyy</title>
             </Head>
             <Box
                 component="main"

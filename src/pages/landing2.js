@@ -34,7 +34,7 @@ const features = [
 const testimonials = [
     {
         name: 'Ava Johnson',
-        feedback: 'Eventify made planning our corporate event seamless and enjoyable!',
+        feedback: 'Eventifyy made planning our corporate event seamless and enjoyable!',
         avatar: '/avatars/ava.jpg'
     },
     {
@@ -46,7 +46,7 @@ const testimonials = [
 
 const faqs = [
     {
-        question: 'Is Eventify free to use?',
+        question: 'Is Eventifyy free to use?',
         answer: 'We offer a free plan with limited features, and premium plans for advanced needs.',
     },
     {
@@ -195,7 +195,7 @@ export default function LandingPage2() {
                             mb: 2,
                         }}
                     >
-                        Welcome to Eventify
+                        Welcome to Eventifyyy
                     </Typography>
                     <Typography
                         variant="h4"

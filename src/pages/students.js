@@ -82,7 +82,7 @@ const Page = () => {
         <>
             <Head>
                 <title>
-                    Students | Eventify
+                    Students | Eventifyy
                 </title>
             </Head>
             <Box

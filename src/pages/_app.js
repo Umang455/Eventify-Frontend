@@ -37,7 +37,7 @@ const App = (props) => {
     console.log("here2");
 
     // you are safe to use the 'document' object here
-    document.title = "Eventify";
+    document.title = "Eventifyy";
   }, []);
   return (
     <CacheProvider value={emotionCache}>

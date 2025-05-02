@@ -118,7 +118,7 @@ const Page = () => {
         <>
             <Head>
                 <title>
-                    Myevents | Eventify
+                    Myevents | Eventifyy
                 </title>
             </Head>
             <Box

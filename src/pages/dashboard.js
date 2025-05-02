@@ -31,7 +31,7 @@ const Page = () => {
         <>
             <Head>
                 <title>
-                    Dashboard | Eventify
+                    Dashboard | Eventifyy
                 </title>
             </Head>
             <Box
@@ -46,7 +46,7 @@ const Page = () => {
                         container
                         spacing={3}
                     >
-                         <>
+                        <>
 
                             <Grid
                                 xs={12}
@@ -122,30 +122,30 @@ const Page = () => {
                                 />
                             </Grid> */}
                         </>
-                            
-                                <>
-                                    <Grid
-                                        xs={12}
-                                        md={6}
-                                        lg={4}
-                                    >
-                                        <Card sx={{ height: '100%', }}  >
-                                            {/* <CardHeader title="My Details" > </CardHeader> */}
-                                            <Box sx={{ display: 'flex', alignContent: 'center', justifyContent: 'center', marginY: 5 }}>
-                                                <img src={baseUrl + 'public/uploads/' + userDetails?.image} style={{ width: 150, height: 150 }} />
-                                            </Box>
-                                            <Divider />
-                                            <Box padding={3}>
-                                                <Stack spacing={2}>
-                                                    <Typography variant='h6'  > Name : {userDetails?.name}</Typography>
-                                                    <Typography   > Number : {userDetails?.phone}</Typography>
-                                                    <Typography   > Email : {userDetails?.email}</Typography>
-                                                    <Typography   > Address : {userDetails?.address}</Typography>
 
-                                                </Stack>
-                                            </Box>
-                                            <CardActions sx={{ justifyContent: 'flex-end' }}>
-                                                {/* <Button
+                        <>
+                            <Grid
+                                xs={12}
+                                md={6}
+                                lg={4}
+                            >
+                                <Card sx={{ height: '100%', }}  >
+                                    {/* <CardHeader title="My Details" > </CardHeader> */}
+                                    <Box sx={{ display: 'flex', alignContent: 'center', justifyContent: 'center', marginY: 5 }}>
+                                        <img src={baseUrl + 'public/uploads/' + userDetails?.image} style={{ width: 150, height: 150 }} />
+                                    </Box>
+                                    <Divider />
+                                    <Box padding={3}>
+                                        <Stack spacing={2}>
+                                            <Typography variant='h6'  > Name : {userDetails?.name}</Typography>
+                                            <Typography   > Number : {userDetails?.phone}</Typography>
+                                            <Typography   > Email : {userDetails?.email}</Typography>
+                                            <Typography   > Address : {userDetails?.address}</Typography>
+
+                                        </Stack>
+                                    </Box>
+                                    <CardActions sx={{ justifyContent: 'flex-end' }}>
+                                        {/* <Button
                                                     color="inherit"
                                                     endIcon={(
                                                         <SvgIcon fontSize="small">
@@ -157,20 +157,20 @@ const Page = () => {
                                                 >
                                                     View all
                                                 </Button> */}
-                                            </CardActions>
-                                        </Card>
-                                    </Grid>
-                                    <Grid
-                                        xs={12}
-                                        md={12}
-                                        lg={8}
-                                    >
-                                        <OverviewLatestOrders
-                                            orders={userDetails?.coursesRegistered}
-                                            sx={{ height: '100%' }}
-                                        />
-                                    </Grid></>
-                            
+                                    </CardActions>
+                                </Card>
+                            </Grid>
+                            <Grid
+                                xs={12}
+                                md={12}
+                                lg={8}
+                            >
+                                <OverviewLatestOrders
+                                    orders={userDetails?.coursesRegistered}
+                                    sx={{ height: '100%' }}
+                                />
+                            </Grid></>
+
 
 
                     </Grid>

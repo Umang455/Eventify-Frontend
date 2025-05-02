@@ -27,7 +27,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard | Eventify
+          Dashboard | Eventifyy
         </title>
       </Head>
       <Box

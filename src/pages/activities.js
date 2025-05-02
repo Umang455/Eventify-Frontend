@@ -65,7 +65,7 @@ const Page = () => {
         <>
             <Head>
                 <title>
-                    Activities | Eventify
+                    Activities | Eventifyy
                 </title>
             </Head>
             <Box

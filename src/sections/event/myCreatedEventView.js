@@ -253,7 +253,7 @@ export const MyCreatedEventView = ({ open, setOpen, item, userDetails }) => {
                             font-size: 14px;
                         ">
                             <p>We look forward to seeing you there!</p>
-                            <p>Best regards,<br>The Eventify Team</p>
+                            <p>Best regards,<br>The Eventifyy Team</p>
                         </div>
                     </div>
                 </div>

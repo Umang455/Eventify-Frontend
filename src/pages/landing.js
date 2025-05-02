@@ -33,7 +33,7 @@ const features = [
 const testimonials = [
     {
         name: 'Ava Johnson',
-        feedback: 'Eventify made planning our corporate event seamless and enjoyable!',
+        feedback: 'Eventifyy made planning our corporate event seamless and enjoyable!',
         avatar: '/avatars/ava.jpg'
     },
     {
@@ -45,7 +45,7 @@ const testimonials = [
 
 const faqs = [
     {
-        question: 'Is Eventify free to use?',
+        question: 'Is Eventifyy free to use?',
         answer: 'We offer a free plan with limited features, and premium plans for advanced needs.',
     },
     {
@@ -54,7 +54,7 @@ const faqs = [
     },
 ];
 
-export default function EventifyLandingPage() {
+export default function EventifyyLandingPage() {
     const router = useRouter();
     const theme = createTheme({
         palette: {
@@ -159,7 +159,7 @@ export default function EventifyLandingPage() {
                             mb: 2,
                         }}
                     >
-                        Plan Events Effortlessly with Eventify
+                        Plan Events Effortlessly with Eventifyy
                     </Typography>
                     <Typography
                         variant="h6"
@@ -212,7 +212,7 @@ export default function EventifyLandingPage() {
                             textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
                         }}
                     >
-                        Welcome to Eventify
+                        Welcome to Eventifyy
                     </Typography>
                     <Typography
                         variant="h4"
@@ -266,7 +266,7 @@ export default function EventifyLandingPage() {
                         Plan Smarter, Not Harder
                     </Typography>
                     <Typography variant="h6">
-                        Let Eventify handle the logistics while you focus on the experience.
+                        Let Eventifyy handle the logistics while you focus on the experience.
                     </Typography>
                 </Box>
 
@@ -321,7 +321,7 @@ export default function EventifyLandingPage() {
                         Seamless Planning, Flawless Execution
                     </Typography>
                     <Typography variant="h6">
-                        Your perfect event is just a few clicks away with Eventify.
+                        Your perfect event is just a few clicks away with Eventifyy.
                     </Typography>
                 </Box>
 

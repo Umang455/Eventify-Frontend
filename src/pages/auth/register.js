@@ -83,7 +83,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Register | Eventify</title>
+        <title>Register | Eventifyy</title>
       </Head>
       <Box
         sx={{

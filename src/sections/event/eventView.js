@@ -343,7 +343,7 @@ export const EventView = ({ open, setOpen, item, userDetails, showScheduleOption
                             font-size: 14px;
                         ">
                             <p>We look forward to seeing you there!</p>
-                            <p>Best regards,<br>The Eventify Team</p>
+                            <p>Best regards,<br>The Eventifyy Team</p>
                         </div>
                     </div>
                 </div>
